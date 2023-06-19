@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>WordY Dictionary</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+<link rel="icon" href="dictionary/wordy.png" type="image/icon">
+    <style>
+    /* Custom styles specific to the dictionary website */
+    .search-form {
+      max-width: 400px;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .search-input {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      box-sizing: border-box;
+      margin-bottom: 12px;
+    }
+
+    .search-button {
+      width: 100%;
+      padding: 12px;
+      border: none;
+      background-color: #4CAF50;
+      color: #fff;
+      cursor: pointer;
+      border-radius: 4px;
+    }
+
+    .search-results {
+      margin-top: 20px;
+    }
+
+    .word-definition {
+      margin-bottom: 20px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      padding: 20px;
+      background-color: #f9f9f9;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .word {
+      font-size: 24px;
+      font-weight: bold;
+    }
+
+    .part-of-speech {
+      margin-top: 5px;
+      font-style: italic;
+      color: #777;
+    }
+
+    .definition {
+      margin-top: 10px;
+    }
+
+    .example {
+      margin-top: 15px;
+      font-style: italic;
+      color: #555;
+    }
+
+    .audio {
+      margin-top: 15px;
+    }
+
+
+  </style>
+
+ <style>
+    /* Custom styles for the play button */
+    .play-button {
+      display: inline-block;
+      width: 40px;
+      height: 40px;
+      background-color: #4CAF50;
+      border-radius: 50%;
+      text-align: center;
+      line-height: 30px;
+      color: white;
+      font-size: 15px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    .play-button:hover {
+      background-color: #45a049;
+    }
+
+    .play-icon {
+      transform: translateY(1px);
+    }
+  </style>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
+</head>
+<body>
+<!--Nav bar -->
+
+
+    <nav class="navbar navbar-expand-lg bg-body-tertiary bg-dark border-bottom border-bottom-dark" data-bs-theme="dark">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="/">WordY</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" href="https://yunique-translator.vercel.app">Y-translator</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="https://github.com/yunik2code">About Dev</a>
+        </li>
+
+        </li>
+
+      </ul>
+
+    </div>
+  </div>
+</nav>
+
+
+<!--Nav bar ends-->
+
+
+
+
+  <div class="container">
+    <div class="row">
+      <div class="col-md-8 offset-md-2">
+        <h3 class="text-center mt-5">WordY. It`s what you need !</h3>
+<form method="post">
+  {% csrf_token %}
+        <div class="search-form">
+          <input type="text"  value="{{word}}" class="search-input" name="word" placeholder="Enter a word">
+          <button type="submit" class="search-button btn btn-primary">Search</button>
+        </div>
+  </form>
+{% if message == 'nothing'%}
+          <div class="container  mt-5 text-center mb-3">
+              Please check our other website to Translate Text to almost all languages.<br>
+              <a href="https://yunique-translator.vercel.app"><button class="btn btn-primary">Translate Text</button></a>
+          </div>
+          {% else %}
+          {% if message == 'No Definitions Found !' %}
+          <div class="container  mt-5 text-center mb-3">
+             <p class="text-center text-danger"> No Definitions Found. Please Try Other Words !</p><br>
+
+          </div>
+          {% else %}
+        <div class="search-results">
+          <div class="word-definition">
+            <h6 class="word">[{{pronoun}}]</h6>
+             <div>
+    <button class="play-button" onclick="playAudio('{{audio_url}}')">
+      <i class="fas fa-play play-icon"></i>
+    </button>
+  </div>
+            {% for meaning in meanings %}
+            <div class="container shadow p-3 mb-5 bg-white rounded">
+
+                            <p id="speech" class="part-of-speech text-info">{{meaning.partOfSpeech}}</p>
+            {% for things in meaning.definitions%}
+              <div class="border-left border-info  ">
+           <p id="defination" class="definition ms-3">&nbsp;{{things.definition}}</p>
+                </div>
+              <p id='example text-monospace ' class="example text-success">   &nbsp; &nbsp; &nbsp;    {{things.example}}</p>
+
+            {% endfor %}
+              </div>
+
+
+
+{% endfor %}
+
+
+
+              <!--Play audio-->
+
+
+
+
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js"></script>
+  <script>
+    function playAudio(audio_url) {
+      var audio = new Audio(audio_url);
+      audio.play();
+    }
+</script>
+              {% endif %}
+              {% endif %}
+
+
+</body>
+</html>
